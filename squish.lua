@@ -34,6 +34,13 @@ if opts.very_verbose then print_debug = print; end
 
 print = print_verbose;
 
+-- Make print functions globally available for embedded modules
+_G.print_err = print_err;
+_G.print_info = print_info;
+_G.print_verbose = print_verbose;
+_G.print_debug = print_debug;
+_G.opts = opts;
+
 local modules, main_files, resources = {}, {}, {};
 
 --  Functions to be called from squishy file  --
@@ -324,3 +331,18 @@ end
 f:close();
 
 print_info("OK!");
+
+-- Load and execute embedded post-processing modules
+if opts.minify or opts.minify_level then
+	local ok, err = pcall(require, "squish.minify");
+	if not ok then
+		print_verbose("Minify module not available: "..tostring(err));
+	end
+end
+
+if opts.uglify then
+	local ok, err = pcall(require, "squish.uglify");
+	if not ok then
+		print_verbose("Uglify module not available: "..tostring(err));
+	end
+end
