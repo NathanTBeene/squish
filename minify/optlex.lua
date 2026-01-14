@@ -4,6 +4,7 @@
   This file is part of LuaSrcDiet.
 
   Copyright (c) 2008 Kein-Hong Man <khman@users.sf.net>
+  Modified for Lua 5.2+ compatibility by aten.dev (2026)
   The COPYRIGHT file describes the conditions
   under which this software may be distributed.
 
@@ -13,6 +14,7 @@
 
 --[[--------------------------------------------------------------------
 -- NOTES:
+-- * MODIFIED: Converted from module() to Lua 5.2+ module pattern
 -- * For more lexer-based optimization ideas, see the TODO items or
 --   look at technotes.txt.
 -- * TODO: general string delimiter conversion optimizer
@@ -21,7 +23,7 @@
 
 local base = _G
 local string = require "string"
-module "optlex"
+local M = {}
 local match = string.match
 local sub = string.sub
 local find = string.find
@@ -33,9 +35,9 @@ local print
 ------------------------------------------------------------------------
 
 -- error function, can override by setting own function into module
-error = base.error
+M.error = base.error
 
-warn = {}                       -- table for warning flags
+M.warn = {}                       -- table for warning flags
 
 local stoks, sinfos, stoklns    -- source lists
 
@@ -466,7 +468,7 @@ local function do_lstring(I)
     if ln ~= "" then
       -- flag a warning if there are trailing spaces, won't optimize!
       if match(ln, "%s+$") then
-        warn.lstring = "trailing whitespace in long string near line "..stoklns[I]
+        M.warn.lstring = "trailing whitespace in long string near line "..stoklns[I]
       end
       y = y..ln
     end
@@ -607,7 +609,7 @@ end
 --   processing is a little messy or convoluted
 ------------------------------------------------------------------------
 
-function optimize(option, toklist, semlist, toklnlist)
+function M.optimize(option, toklist, semlist, toklnlist)
   --------------------------------------------------------------------
   -- set option flags
   --------------------------------------------------------------------
@@ -830,3 +832,5 @@ function optimize(option, toklist, semlist, toklnlist)
   if opt_details and opt_details > 0 then print() end -- spacing
   return stoks, sinfos, stoklns
 end
+
+return M

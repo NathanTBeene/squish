@@ -4,6 +4,7 @@
   This file is part of LuaSrcDiet.
 
   Copyright (c) 2008 Kein-Hong Man <khman@users.sf.net>
+  Modified for Lua 5.2+ compatibility by aten.dev (2026)
   The COPYRIGHT file describes the conditions
   under which this software may be distributed.
 
@@ -13,6 +14,7 @@
 
 --[[--------------------------------------------------------------------
 -- NOTES:
+-- * MODIFIED: Converted from module() to Lua 5.2+ module pattern
 -- * For more parser-based optimization ideas, see the TODO items or
 --   look at technotes.txt.
 -- * The processing load is quite significant, but since this is an
@@ -30,7 +32,7 @@
 local base = _G
 local string = require "string"
 local table = require "table"
-module "optparser"
+local M = {}
 
 ----------------------------------------------------------------------
 -- Letter frequencies for reducing symbol entropy (fixed version)
@@ -218,7 +220,7 @@ end
 -- * does only local variable optimization for now
 ----------------------------------------------------------------------
 
-function optimize(option, _toklist, _seminfolist, _globalinfo, _localinfo)
+function M.optimize(option, _toklist, _seminfolist, _globalinfo, _localinfo)
   -- set tables
   toklist, seminfolist, globalinfo, localinfo
     = _toklist, _seminfolist, _globalinfo, _localinfo
@@ -440,3 +442,5 @@ function optimize(option, _toklist, _seminfolist, _globalinfo, _localinfo)
   local afteruniq = preprocess(localinfo)
   ------------------------------------------------------------------
 end
+
+return M

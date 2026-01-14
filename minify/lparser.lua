@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 
-  lparser.lua: Lua 5.1 parser in Lua
+  lparser.lua: Lua 5.2+ parser in Lua
   This file is part of LuaSrcDiet, based on Yueliang material.
 
   Copyright (c) 2008 Kein-Hong Man <khman@users.sf.net>
+  Modified for Lua 5.2+ compatibility by aten.dev (2026)
   The COPYRIGHT file describes the conditions
   under which this software may be distributed.
 
@@ -19,6 +20,7 @@
 --   (2) lparser.error is an optional error handler (from llex)
 --   (3) not full parsing, currently fakes raw/unlexed constants
 --   (4) parser() returns globalinfo, localinfo tables
+-- * MODIFIED: Converted from module() to Lua 5.2+ module pattern
 -- * Please read technotes.txt for more technical details.
 -- * NO support for 'arg' vararg functions (LUA_COMPAT_VARARG)
 -- * A lot of the parser is unused, but might later be useful for
@@ -27,7 +29,7 @@
 
 local base = _G
 local string = require "string"
-module "lparser"
+local M = {}
 
 --[[--------------------------------------------------------------------
 -- variable and data structure initialization
@@ -1010,7 +1012,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function for_stat()
+function M.for_stat()
   -- stat -> for_stat -> FOR (fornum | forlist) END
   local line = line
   enterblock(true)  -- scope for loop and control variables
@@ -1033,7 +1035,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function while_stat()
+function M.while_stat()
   -- stat -> while_stat -> WHILE cond DO block END
   local line = line
   nextt()  -- skip WHILE
@@ -1053,7 +1055,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function repeat_stat()
+function M.repeat_stat()
   -- stat -> repeat_stat -> REPEAT block UNTIL cond
   local line = line
   enterblock(true)  -- loop block
@@ -1072,7 +1074,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function if_stat()
+function M.if_stat()
   -- stat -> if_stat -> IF cond THEN block
   --                    {ELSEIF cond THEN block} [ELSE block] END
   local line = line
@@ -1093,7 +1095,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function return_stat()
+function M.return_stat()
   -- stat -> return_stat -> RETURN explist
   local e = {}
   nextt()  -- skip RETURN
@@ -1110,7 +1112,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function break_stat()
+function M.break_stat()
   -- stat -> break_stat -> BREAK
   local bl = fs.bl
   nextt()  -- skip BREAK
@@ -1129,7 +1131,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function expr_stat()
+function M.expr_stat()
   -- stat -> expr_stat -> func | assignment
   local v = {}
   v.v = {}
@@ -1147,7 +1149,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function function_stat()
+function M.function_stat()
   -- stat -> function_stat -> FUNCTION funcname body
   local line = line
   local v, b = {}, {}
@@ -1161,7 +1163,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function do_stat()
+function M.do_stat()
   -- stat -> do_stat -> DO block END
   local line = line
   nextt()  -- skip DO
@@ -1174,7 +1176,7 @@ end
 -- * used in stat()
 ----------------------------------------------------------------------
 
-function local_stat()
+function M.local_stat()
   -- stat -> local_stat -> LOCAL FUNCTION localfunc
   --                    -> LOCAL localstat
   nextt()  -- skip LOCAL
@@ -1205,11 +1207,11 @@ local function stat()
   local fn = stat_call[c]
   -- handles: if while do for repeat function local return break
   if fn then
-    _M[fn]()
+    M[fn]()
     -- return or break must be last statement
     if c == "return" or c == "break" then return true end
   else
-    expr_stat()
+    M.expr_stat()
   end
   return false
 end
@@ -1233,7 +1235,7 @@ end
 -- performs parsing, returns parsed data structure
 ----------------------------------------------------------------------
 
-function parser()
+function M.parser()
   open_func()
   fs.is_vararg = true  -- main func. is always vararg
   nextt()  -- read first token
@@ -1247,7 +1249,7 @@ end
 -- initialization function
 ----------------------------------------------------------------------
 
-function init(tokorig, seminfoorig, toklnorig)
+function M.init(tokorig, seminfoorig, toklnorig)
   tpos = 1                      -- token position
   top_fs = {}                   -- reset top level function state
   ------------------------------------------------------------------
@@ -1291,4 +1293,4 @@ function init(tokorig, seminfoorig, toklnorig)
   ilocalinfo, ilocalrefs = {}, {}
 end
 
-return _M
+return M

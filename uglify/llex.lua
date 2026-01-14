@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 
-  llex.lua: Lua 5.1 lexical analyzer in Lua
+  llex.lua: Lua 5.2+ lexical analyzer in Lua
   This file is part of LuaSrcDiet, based on Yueliang material.
 
   Copyright (c) 2008 Kein-Hong Man <khman@users.sf.net>
+  Modified for Lua 5.2+ compatibility by aten.dev (2026)
   The COPYRIGHT file describes the conditions
   under which this software may be distributed.
 
@@ -18,6 +19,7 @@
 --   (1) llex.error is an optional error function handler
 --   (2) seminfo for strings include their delimiters and no
 --       translation operations are performed on them
+-- * MODIFIED: Converted from module() to Lua 5.2+ module pattern
 -- * ADDED shbang handling has been added to support executable scripts
 -- * NO localized decimal point replacement magic
 -- * NO limit to number of lines
@@ -27,7 +29,7 @@
 
 local base = _G
 local string = require "string"
-module "llex"
+local M = {}
 
 local find = string.find
 local match = string.match
@@ -58,10 +60,10 @@ local z,                -- source stream
 ----------------------------------------------------------------------
 
 local function addtoken(token, info)
-  local i = #tok + 1
-  tok[i] = token
-  seminfo[i] = info
-  tokln[i] = ln
+  local i = #M.tok + 1
+  M.tok[i] = token
+  M.seminfo[i] = info
+  M.tokln[i] = ln
 end
 
 ----------------------------------------------------------------------
@@ -87,14 +89,14 @@ end
 -- initialize lexer for given source _z and source name _sourceid
 ----------------------------------------------------------------------
 
-function init(_z, _sourceid)
+function M.init(_z, _sourceid)
   z = _z                        -- source
   sourceid = _sourceid          -- name of source
   I = 1                         -- lexer's position in source
   ln = 1                        -- line number
-  tok = {}                      -- lexed token list*
-  seminfo = {}                  -- lexed semantic information list*
-  tokln = {}                    -- line numbers for messages*
+  M.tok = {}                    -- lexed token list*
+  M.seminfo = {}                -- lexed semantic information list*
+  M.tokln = {}                  -- line numbers for messages*
                                 -- (*) externally visible thru' module
   --------------------------------------------------------------------
   -- initial processing (shbang handling)
@@ -111,7 +113,7 @@ end
 -- returns a chunk name or id, no truncation for long names
 ----------------------------------------------------------------------
 
-function chunkid()
+function M.chunkid()
   if sourceid and match(sourceid, "^[=@]") then
     return sub(sourceid, 2)  -- remove first char
   end
@@ -123,11 +125,11 @@ end
 -- * a simplified version, does not report what token was responsible
 ----------------------------------------------------------------------
 
-function errorline(s, line)
+function M.errorline(s, line)
   local e = error or base.error
-  e(string.format("%s:%d: %s", chunkid(), line or ln, s))
+  e(string.format("%s:%d: %s", M.chunkid(), line or ln, s))
 end
-local errorline = errorline
+local errorline = M.errorline
 
 ------------------------------------------------------------------------
 -- count separators ("=") in a long string delimiter
@@ -233,7 +235,7 @@ end
 -- main lexer function
 ------------------------------------------------------------------------
 
-function llex()
+function M.llex()
   local find = find
   local match = match
   while true do--outer
@@ -352,4 +354,4 @@ function llex()
   end--while outer
 end
 
-return _M
+return M
