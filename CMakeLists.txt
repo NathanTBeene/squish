@@ -4,12 +4,12 @@
 # For details see the COPYRIGHT file distributed with LuaDist.
 # Please note that the package source code is licensed under its own license.
 
+cmake_minimum_required ( VERSION 3.10...4.2 )
 project ( squish NONE )
-cmake_minimum_required ( VERSION 2.8 )
 include ( cmake/dist.cmake )
 include ( lua )
 
-find_package ( Lua )
+find_program ( LUA_EXECUTABLE lua REQUIRED )
 
 # Squish itself
 add_custom_target ( bootstrap ALL
