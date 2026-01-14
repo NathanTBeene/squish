@@ -1,3 +1,11 @@
+Version 0.3.0 (2026-01-14) - aten.dev
+  * Updated for Lua 5.2+ compatibility
+  * Converted all module() declarations to modern module pattern
+  * Updated minify/llex.lua, lparser.lua, optlex.lua, optparser.lua
+  * Updated uglify/llex.lua
+  * Tested with Lua 5.2, 5.3, 5.4
+  * Requires Lua 5.2 or later (no longer supports Lua 5.1)
+
 0.2.0 - 2010-10-10
 	+ New gzip filter to produce compressed self-decompressing scripts
 	+ New --uglify-level=full to replace long repeated identifiers and string literals
