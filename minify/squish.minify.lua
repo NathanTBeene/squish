@@ -15,11 +15,16 @@ if opts.minify_level and not minify_defaults[opts.minify_level] then
 	print_err("Unknown minify level: "..opts.minify_level);
 	print_err("Available minify levels: none, basic, default, full, debug");
 end
-for _, opt in ipairs(minify_defaults[opts.minify_level or "default"] or {}) do
-	if opts["minify_"..opt] == nil then
-		opts["minify_"..opt] = true;
-	end
+
+-- Only apply minify defaults if minify is explicitly enabled
+if opts.minify or opts.minify_level then
+  for _, opt in ipairs(minify_defaults[opts.minify_level or "default"] or {}) do
+    if opts["minify_"..opt] == nil then
+      opts["minify_"..opt] = true;
+    end
+  end
 end
+
 
 local option = {
 	["opt-locals"] = opts.minify_locals;
@@ -84,7 +89,8 @@ function minify_file(srcfl, destfl)
 	save_file(destfl, z);
 end
 
-if opts.minify ~= false then
+-- Only minify if the option is enabled
+if opts.minify == true then
 	print_info("Minifying "..out_fn.."...");
 	minify_file(out_fn, out_fn);
 	print_info("OK!");
