@@ -4,6 +4,9 @@ squish.debug
 squish
 *.uglified
 
+# Distribution folder
+release/dist/
+
 # Build directories
 build/
 .vs/

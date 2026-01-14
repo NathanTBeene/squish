@@ -349,6 +349,49 @@ Squish is licensed under the **MIT License**. See [COPYRIGHT](COPYRIGHT) for det
 
 ---
 
+## Building Releases
+
+> **For Maintainers:** Automated scripts for building distribution packages
+
+Squish includes build scripts in the `release/` folder that automatically create distribution packages from `dist.info`.
+
+### Build Scripts
+
+**PowerShell (Windows):**
+```powershell
+cd release
+.\build_release.ps1          # Build all variants
+.\build_release.ps1 -Clean   # Clean and rebuild
+```
+
+**Bash (Linux/macOS):**
+```bash
+cd release
+./build_release.sh           # Build all variants
+./build_release.sh --clean   # Clean and rebuild
+```
+
+### What Gets Built
+
+The scripts automatically read version information from `dist.info` and create:
+
+**Lua Scripts:**
+- `squish-basic-vX.X.X.lua` — Basic squish without features
+- `squish-full-vX.X.X.lua` — All features included
+- `squish-minify-vX.X.X.lua` — Minify support only
+- `squish-uglify-vX.X.X.lua` — Uglify support only
+- `gunzip-vX.X.X.lua` — Standalone gzip decompressor
+- `squish-debug-vX.X.X.lua` — Debug support module
+
+**Archives:**
+- `squish-lua-vX.X.X.zip/tar.gz` — All Lua scripts
+- `squish-complete-vX.X.X.zip/tar.gz` — Scripts + documentation
+- `SHA256SUMS.txt` — Checksums for verification
+
+All files are created in `release/dist/` and are ready for GitHub release.
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please:
