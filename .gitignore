@@ -1,5 +1,37 @@
+# Build outputs
 gunzip.lua
 squish.debug
 squish
+*.uglified
+
+# Build directories
 build/
-test_project/combined*.lua
+.vs/
+.vscode/
+
+# Test outputs
+test_project/
+**/combined*.lua
+*.test.lua
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# OS specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+
+# Lua bytecode
+*.luac
