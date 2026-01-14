@@ -10,6 +10,11 @@
 -- assert(minichunkspy.validate(<function or chunk>))
 --
 -- Tested on little-endian 32 and 64 bit platforms.
+
+-- Lua 5.2+ compatibility
+local unpack = table.unpack or unpack
+
+
 local string, table, math = string, table, math
 local ipairs, setmetatable, type, assert = ipairs, setmetatable, type, assert
 local _ = __END_OF_GLOBALS__

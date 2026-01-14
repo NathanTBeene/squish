@@ -13,6 +13,10 @@
 -- the Size_t type to be a 64 bit integer to make it work
 -- for 64 bit systems, and set BIG_ENDIAN = true for
 -- big-endian systems.
+
+-- Lua 5.2+ compatibility
+local unpack = table.unpack or unpack
+
 local string, table, math = string, table, math
 local ipairs, setmetatable, type, assert = ipairs, setmetatable, type, assert
 local _ = __END_OF_GLOBALS__

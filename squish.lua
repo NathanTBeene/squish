@@ -129,17 +129,17 @@ local fetch = {};
 function fetch.filesystem(path)
 	local f, err = io.open(path);
 	if not f then return false, err; end
-	
+
 	local data = f:read("*a");
 	f:close();
-	
+
 	return data;
 end
 
 if opts.use_http then
 	function fetch.http(url)
 		local http = require "socket.http";
-		
+
 		local body, status = http.request(url);
 		if status == 200 then
 			return body;
@@ -171,7 +171,7 @@ print_verbose("Resolving modules...");
 do
 	local LUA_DIRSEP = package.config:sub(1,1);
 	local LUA_PATH_MARK = package.config:sub(5,5);
-	
+
 	local package_path = package.path:gsub("[^;]+", function (path)
 			if not path:match("^%"..LUA_DIRSEP) then
 				return base_path..path;
@@ -241,7 +241,7 @@ for _, module in ipairs(modules) do
 			f:write(data);
 			f:write(" end)\n");
 		else
-			f:write("package.preload['", modulename, "'] = assert(loadstring(\n");
+			f:write("package.preload['", modulename, "'] = assert(load(\n");
 			f:write(("%q\n"):format(data));
 			f:write(", ", ("%q"):format("@"..path), "))\n");
 		end
@@ -264,7 +264,7 @@ if #resources > 0 then
 		local data = res_file:read("*a");
 		local maxequals = 0;
 		data:gsub("(=+)", function (equals_string) maxequals = math.max(maxequals, #equals_string); end);
-		
+
 		f:write(("resources[%q] = %q"):format(name, data));
 --[[		f:write(("resources[%q] = ["):format(name), string.rep("=", maxequals+1), "[");
 		f:write(data);
@@ -295,14 +295,14 @@ if #resources > 0 then
 					if not resources[fn] then
 						return _dofile(fn);
 					else
-						return assert(loadstring(resources[fn]))();
+						return assert(load(resources[fn]))();
 				end end
 				local _loadfile = loadfile;
 				function loadfile(fn)
 					if not resources[fn] then
 						return _loadfile(fn);
 					else
-						return loadstring(resources[fn], "@"..fn);
+						return load(resources[fn], "@"..fn);
 				end end ]]
 		end
 	end

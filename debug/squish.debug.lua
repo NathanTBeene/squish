@@ -18,5 +18,5 @@ local function ___adjust_chunk(chunk, newname, lineshift)
 	end
 	shiftlines(c.body);
 
-	return assert(loadstring(cs.assemble(c), newname))();
+	return assert(load(cs.assemble(c), newname))();
 end
