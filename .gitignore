@@ -2,3 +2,4 @@ gunzip.lua
 squish.debug
 squish
 build/
+test_project/combined*.lua
