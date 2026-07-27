@@ -53,7 +53,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/NathanTBeene/squish.git
+git clone https://github.com/atendev/squish.git
 cd squish
 
 # Build
