@@ -1,6 +1,6 @@
 
 -- Set this option, same as if user specified
--- '--executable' on the command-line. Can be 
+-- '--executable' on the command-line. Can be
 -- disabled by user with '--no-executable'
 Option "executable"
 
@@ -23,7 +23,7 @@ end
 -- Compress Lua scripts (an excellent hack :) )
 if GetOption "with-uglify" then
 	Module "llex"		"uglify/llex.lua"
-	
+
 	Main "uglify/squish.uglify.lua"
 end
 

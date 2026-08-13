@@ -1,7 +1,7 @@
 --- This file is part of LuaDist project
 
 name = "squish"
-version = "0.3.0"
+version = "0.4.0"
 
 desc = "Squish Lua libraries and apps into a single compact file."
 author = "Matthew Wild"

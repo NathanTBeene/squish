@@ -95,3 +95,5 @@ if opts.minify == true then
 	minify_file(out_fn, out_fn);
 	print_info("OK!");
 end
+
+return minify_file

@@ -5,7 +5,7 @@
 # Please note that the package source code is licensed under its own license.
 
 cmake_minimum_required ( VERSION 3.10...4.2 )
-project ( squish VERSION 0.3.0 LANGUAGES NONE )
+project ( squish VERSION 0.4.0 LANGUAGES NONE )
 include ( cmake/dist.cmake )
 include ( lua )
 

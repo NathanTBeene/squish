@@ -130,3 +130,5 @@ if opts.uglify == true then
 	uglify_file(out_fn, out_fn);
 	print_info("OK!");
 end
+
+return uglify_file
